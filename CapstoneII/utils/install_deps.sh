@@ -6,8 +6,10 @@ fi
 
 echo "We will run updates & upgrades first for Raspbian & the R-PI... this will"
 echo "probably take quite a while."
-# Run all the update commands
+
+# Run all the update commands but clean up the package cache first
 apt-get -y clean
+
 # This is a third-party created kernel & firmware updater
 apt-get -y install rpi-update
 apt-get -y update
@@ -19,10 +21,15 @@ rpi-update
 apt-get install -y erlang
 apt-get install -y rabbitmq-server
 
+# Now for bluetooth stuff
+apt-get install -y bluetooth bluez blueman
+
 # Now let's get the python dependencies
 pip3 install guizero
 pip3 install pika
-
+pip3 install bluepy
+pip3 install asyncio
+pip3 install filelock
 
 echo "You should reboot now."
 

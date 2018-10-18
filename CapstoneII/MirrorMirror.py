@@ -28,7 +28,7 @@ def run_gui():
 		
 	def update():
 		now = datetime.datetime.now()
-		display_clock.set(now.strftime("%I:%M %p"))
+		display_clock.set(now.strftime("%X %p")) #now.strftime("%I:%M %p"))
 		display_date.set(now.strftime("%a, %b-%d, %Y"))
 	
 	def get_local_ip():
@@ -51,7 +51,7 @@ def run_gui():
 
 	display_clock = Text(app, text = now.strftime("%I:%M %p"),grid=[0,1], color="white", size="30")
 	display_date = Text(app, text = now.strftime("%a, %b-%d, %Y"), grid=[0,2], color="white", size="20")
-	display_ip = Text(app, text = get_local_ip(), grid=[0,6], color="white", size="12")
+	display_ip = Text(app, text = get_local_ip(), grid=[1,6], color="white", size="12")
 
 	year = int(now.strftime("%Y"))
 	month = int(now.strftime("%-m"))

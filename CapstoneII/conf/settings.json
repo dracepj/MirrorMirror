@@ -1,0 +1,13 @@
+{
+    "key" : "value",
+    "array" : [
+        { "key" : 1 },
+        { "key" : 2, "dictionary": {
+                "a": "Test",
+                "b": "Berfly",
+                "c": "Cat",
+                "d": "Dog"
+            } },
+        { "key" : 3 }
+    ]
+}

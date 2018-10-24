@@ -10,7 +10,7 @@ import calendar
 from filelock import Timeout, FileLock
 #import tkinter
 
-settings_file = "./config/settings.json"
+settings_file = "./conf/settings.json"
 def check_settings():
 		lock = FileLock(settings_file + ".lock", timeout=2)
 		s_data = None
@@ -77,19 +77,19 @@ try:
 	#Time_Date_Greeting_Grid Section- WORKING!
 	Box1 = Box(app,layout="grid", grid=Time_Date_Greeting_Grid, visible=Time_Date_Greeting_Visible)
 	if(now.strftime("%h") < "12"):
-	display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
-	display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
-	display_greeting = Text(Box1, text = "\nGood Morning, \n"+my_name, grid=[0,3], color="white", size="45")   
+		display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
+		display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
+		display_greeting = Text(Box1, text = "\nGood Morning, \n"+my_name, grid=[0,3], color="white", size="45")   
 
 	elif(now.strftime("%h") >= "12" and now.strftime("%h") < "19"):
-	display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
-	display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
-	display_greeting = Text(Box1, text = "\nGood Afternoon, \n"+my_name, grid=[0,3], color="white", size="45")
+		display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
+		display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
+		display_greeting = Text(Box1, text = "\nGood Afternoon, \n"+my_name, grid=[0,3], color="white", size="45")
 
 	elif(now.strftime("%h") >= "19"):
-	display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
-	display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
-	display_greeting = Text(Box1, text = "\nGood Evening, \n"+my_name, grid=[0,3], color="white", size="45")
+		display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
+		display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
+		display_greeting = Text(Box1, text = "\nGood Evening, \n"+my_name, grid=[0,3], color="white", size="45")
 
 
 	#Calandar Section. Not working, Everything is center aligned not aligned, not in columns
@@ -102,6 +102,7 @@ try:
 
 
 	app.repeat(500,update)
+	app.repeat(1000, check_settings)
 
 	#sets full screen-Makes debug hard. To Get out: CTR+ALT+D
 	app.tk.attributes("-fullscreen", True)
@@ -112,5 +113,5 @@ try:
 	app.display()
 
 except KeyboardInterrupt:
-	event_loop.close()
+	quit()
 

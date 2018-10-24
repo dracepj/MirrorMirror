@@ -44,7 +44,7 @@ class MessageParser:
 
 	def start_listening(self):
 		print("Listening on: %s" % self.ip)
-		creds = pika.PlainCredentials('config_user', 'cfguser')
+		creds = pika.PlainCredentials('config', 'cfg_user')
 		parms = pika.ConnectionParameters(self.ip, 5672, '/', creds)
 		connection = pika.SelectConnection(parms, self.open_channel)
 		try:

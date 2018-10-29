@@ -31,5 +31,7 @@ pip3 install bluepy
 pip3 install asyncio
 pip3 install filelock
 
+rabbitmq-plugins enable rabbitmq_management
+
 echo "You should reboot now."
 

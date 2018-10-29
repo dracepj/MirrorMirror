@@ -1,66 +1,117 @@
-from guizero import App, Text, Picture, Box
+#import tkinter
+from guizero import *
 import datetime
 import calendar
-import asyncio
-import socket
+#import asyncio
+#import socket
+#import os
+#import sys
 #from msg_parser import MessageParser
 from filelock import Timeout, FileLock
 #import tkinter
 
-
-class SmartMirror:
-	settings_file = "./conf/settings.json"
-	def check_settings(self):
-		lock = FileLock(self.settings_file + ".lock", timeout=2)
+settings_file = "./conf/settings.json"
+def check_settings():
+		lock = FileLock(settings_file + ".lock", timeout=2)
 		s_data = None
 		try:
 			with lock:
-				settings_data_fhandle = open(self.settings_file)
-				self.settings_data = settings_data_fhandle.read()
-				print(self.settings_data)
+				settings_data_fhandle = open(settings_file)
+				settings_data = settings_data_fhandle.read()
+				print(settings_data)
 		except Timeout:
 			print("Failed to acquire file lock")
 		finally:
 			lock.release()
-		
-	def update_gui(self):
-		now = datetime.datetime.now()
-		self.display_clock.set(now.strftime("%X %p")) #now.strftime("%I:%M %p"))
-		self.display_date.set(now.strftime("%a, %b-%d, %Y"))
-	
-	def get_local_ip(self):
-		s = socket.gethostname()
-		return "Please connect to: %s.local " % s
-	
-	def __init__(self):
-		self.app = App(title="Mirror Mirror", width=1500, height=800, layout="grid", bg="black")
-
-		now = datetime.datetime.now()
-		self.cal = calendar.TextCalendar(calendar.SUNDAY)
-
-		if(now.strftime("%h") < "12"):
-		    self.display_greeting = Text(self.app, text = "Good Morning,",grid=[0,0], color="white", size="30")
-		elif(now.strftime("%h") >= "12" and now.strftime("%h") < "19"):
-		    self.display_greeting = Text(self.app, text = "Good Afternoon",grid=[0,0], color="white", size="30")
-		elif(now.strftime("%h") >= "19"):
-		    self.display_greeting = Text(self.app, text = "Good Evening",grid=[0,0], color="white", size="30")
-
-		self.display_clock = Text(self.app, text = now.strftime("%I:%M %p"),grid=[0,1], color="white", size="30")
-		self.display_date = Text(self.app, text = now.strftime("%a, %b-%d, %Y"), grid=[0,2], color="white", size="20")
-		self.display_ip = Text(self.app, text = self.get_local_ip(), grid=[1,6], color="white", size="12")
-
-		year = int(now.strftime("%Y"))
-		month = int(now.strftime("%-m"))
-		box = Box(self.app, grid=[0,3], align="left")
-		self.display_calendar = Text(box, text = self.cal.formatmonth(year,month), color="white")
 
 
-		self.app.repeat(1000, self.update_gui)
-		self.app.repeat(2000, self.check_settings)
+#Global Variables
+global my_name
+my_name = "Dr. Peng"
 
-		#sets full screen-Makes debug hard. To Get out: CTR+ALT+D
-		#app.tk.attributes("-fullscreen", True)
-		#app.tk.attributes("-nocursor", True)
-		self.app.display()
 
-mirror = SmartMirror()
+#Grid Location Variables - We will change these grid numbers to change Locations. [x,y]
+global Time_Date_Greeting_Grid, Calendar_Grid
+Time_Date_Greeting_Grid = [0,0]
+Calendar_Grid = [0,3]
+
+
+#Visibility for Boxes
+global Time_Date_Greeting_Visible, Calendar_Visible
+Time_Date_Greeting_Visible = 1
+Calendar_Visible = 1
+
+global now, display_clock, display_date
+now = datetime.datetime.now()
+display_clock = now.strftime("%I:%M %p")
+display_date = now.strftime("%a %b-%d, %Y")
+cal = calendar.TextCalendar(calendar.SUNDAY)
+
+#class CursorOff(object)
+#    def _enter_(self):
+#        os.system('setterm -cursor off')
+#
+#    def _exit_(self,*args):
+#        os.system('setterm -cursor on')
+
+
+
+def update():
+	now = datetime.datetime.now()
+	display_clock.set(now.strftime("%I:%M %p"))
+	display_date.set(now.strftime("%a %b-%d, %Y"))
+        
+#os.system('setterm -cursor off')
+try:
+	app = App(title="Mirror Mirror", width=1500, height=800, layout="grid", bg="black")
+
+	#Black-Background Boxs- Will set all to Black525x425.png for final set. Use colors for debug
+	B1 = Picture(app, image="Black525x425.png", grid=[0,0])
+	B2 = Picture(app, image="Red525x425.png", grid=[0,1])
+	B3 = Picture(app, image="Green525x425.png", grid=[0,2])
+	B4 = Picture(app, image="Orange525x425.png", grid=[0,3])
+	B5 = Picture(app, image="Yellow525x425.png", grid=[1,0])
+	B6 = Picture(app, image="Blue525x425.png", grid=[1,1])
+
+
+	#Time_Date_Greeting_Grid Section- WORKING!
+	Box1 = Box(app,layout="grid", grid=Time_Date_Greeting_Grid, visible=Time_Date_Greeting_Visible)
+	if(now.strftime("%h") < "12"):
+		display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
+		display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
+		display_greeting = Text(Box1, text = "\nGood Morning, \n"+my_name, grid=[0,3], color="white", size="45")   
+
+	elif(now.strftime("%h") >= "12" and now.strftime("%h") < "19"):
+		display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
+		display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
+		display_greeting = Text(Box1, text = "\nGood Afternoon, \n"+my_name, grid=[0,3], color="white", size="45")
+
+	elif(now.strftime("%h") >= "19"):
+		display_clock = Text(Box1, text = display_clock, grid=[0,0], color="white", size="45")
+		display_date = Text(Box1, text = display_date, grid=[0,1], color="white", size="45")
+		display_greeting = Text(Box1, text = "\nGood Evening, \n"+my_name, grid=[0,3], color="white", size="45")
+
+
+	#Calandar Section. Not working, Everything is center aligned not aligned, not in columns
+	year = int(now.strftime("%Y"))
+	month = int(now.strftime("%-m"))
+	calFormat = cal.formatmonth(year,month,0,0)
+	print(calFormat)
+	Box2 = Box(app, grid=Calendar_Grid, visible = Calendar_Visible)
+	display_calendar = Text(Box2, text = calFormat, color="white", size="35", align="left")
+
+
+	app.repeat(500,update)
+	app.repeat(1000, check_settings)
+
+	#sets full screen-Makes debug hard. To Get out: CTR+ALT+D
+	app.tk.attributes("-fullscreen", True)
+
+	#nocursor is not working to turn cursor to be invisible.
+	#will need to find something else to make it invisible or move position to side/corner
+
+	app.display()
+
+except KeyboardInterrupt:
+	quit()
+

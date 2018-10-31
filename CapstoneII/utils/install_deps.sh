@@ -1,6 +1,6 @@
 # This script needs to be run with sudo so we can globally install dependencies
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run as root" 1>&2
+   echo "This script must be run as root (sudo ./install_deps.sh)" 1>&2
    exit 1
 fi
 
@@ -30,6 +30,7 @@ pip3 install pika
 pip3 install bluepy
 pip3 install asyncio
 pip3 install filelock
+pip3 install feedparser
 
 rabbitmq-plugins enable rabbitmq_management
 

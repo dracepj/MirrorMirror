@@ -1,13 +1,1 @@
-{
-    "key" : "value",
-    "array" : [
-        { "key" : 1 },
-        { "key" : 2, "dictionary": {
-                "a": "Test",
-                "b": "Berfly",
-                "c": "Cat",
-                "d": "Dog"
-            } },
-        { "key" : 3 }
-    ]
-}
+{"Mirror":{"IpAddress":"192.168.0.107","HostName":"smartmirror-bryton","IsSelected":0,"Id":0},"Cfg":[{"Quadrant":1,"ItemType":"rss","Id":null},{"Quadrant":2,"ItemType":"weather","Id":null}],"RssFeeds":[{"FeedUrl":"http://feeds.washingtonpost.com/rss/rss_election-2012","Name":"Politics","Description":"The guide to U.S. political news.","Articles":null,"Enabled":1,"MaxArticles":0,"Id":0}],"WeatherLocations":[]}

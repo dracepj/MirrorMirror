@@ -6,23 +6,7 @@ import calendar
 #import socket
 #import os
 #import sys
-#from msg_parser import MessageParser
-from filelock import Timeout, FileLock
 #import tkinter
-
-settings_file = "./conf/settings.json"
-def check_settings():
-		lock = FileLock(settings_file + ".lock", timeout=2)
-		s_data = None
-		try:
-			with lock:
-				settings_data_fhandle = open(settings_file)
-				settings_data = settings_data_fhandle.read()
-				print(settings_data)
-		except Timeout:
-			print("Failed to acquire file lock")
-		finally:
-			lock.release()
 
 
 #Global Variables
@@ -102,7 +86,6 @@ try:
 
 
 	app.repeat(500,update)
-	app.repeat(1000, check_settings)
 
 	#sets full screen-Makes debug hard. To Get out: CTR+ALT+D
 	app.tk.attributes("-fullscreen", True)

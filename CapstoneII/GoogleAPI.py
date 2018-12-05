@@ -86,31 +86,38 @@ class Google:
 
     def MessageList(self):
         MessageArray = []
-        response = google.ListMessagesMatchingQuery()
-        for message in response:
-            full_message = google.GetMessage(message['id'])
-            headers = full_message['payload']['headers']
-            for item in headers:
-                if (item['name'] == "From"):
-                    print(full_message)
-                    NewDictionaryItem = {
-                        'from': item['value'],
-                        'summary' : full_message['snippet'][0:50]
-                    }
-                    print(NewDictionaryItem)
+        try:
+            response = google.ListMessagesMatchingQuery()
+            for message in response:
+                full_message = google.GetMessage(message['id'])
+                headers = full_message['payload']['headers']
+                for item in headers:
+                    if (item['name'] == "From"):
+                        NewDictionaryItem = {
+                            'from': item['value'],
+                            'summary' : full_message['snippet'][0:50]
+                        }
+                        MessageArray.append(NewDictionaryItem)
+        except:
+            print("Error: MessageList")
+
+        return MessageArray
 
     def EventList(self):
         EventArray =[]
-        events = google.ListCalendatItems()
+        try:
+            events = google.ListCalendatItems()
 
-        for i in range(0,5):
-            item = events['items'][i]
-            NewDictionaryItem = {
-                'summary': item.get('summary', 'No Description'),
-                'location': item.get('location', 'No Location'),
-                'time': item.get('start', 'No Time')
-            }
-            EventArray.append(NewDictionaryItem)
+            for i in range(0,5):
+                item = events['items'][i]
+                NewDictionaryItem = {
+                    'summary': item.get('summary', 'No Description'),
+                    'location': item.get('location', 'No Location'),
+                    'time': item.get('start', 'No Time')
+                }
+                EventArray.append(NewDictionaryItem)
+        except:
+            print("Error: EventList")
         return EventArray
 
 # Sample usage
@@ -118,8 +125,8 @@ thisaccess_token = "ya29.GltpBlJwAHXAd6rLFiy7Fdc5-q3FA-JNGUvfw5oSM9BVuouMZWFn" \
                    "FU7Ul5PaPzH-7BYlDsvmAMKAdeQcCy6s1GGOfb-49x7O58C7cPbLMdxeRGkR879vWKvgalGB"
 google = Google(thisaccess_token)
 
-print(google.MessageList())
-print(google.EventList())
+google.MessageList()
+google.EventList()
 
 
 

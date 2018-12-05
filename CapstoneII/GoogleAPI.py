@@ -48,7 +48,7 @@ class Google:
                                                                      pageToken=page_token).execute()
                 messages.extend(response['messages'])
 
-            return messages
+            return messages[:5]
         except:
             print("Error: List Messages")
 
@@ -84,22 +84,42 @@ class Google:
             if not page_token:
                 break
 
+    def MessageList(self):
+        MessageArray = []
+        response = google.ListMessagesMatchingQuery()
+        for message in response:
+            full_message = google.GetMessage(message['id'])
+            headers = full_message['payload']['headers']
+            for item in headers:
+                if (item['name'] == "From"):
+                    print(full_message)
+                    NewDictionaryItem = {
+                        'from': item['value'],
+                        'summary' : full_message['snippet'][0:50]
+                    }
+                    print(NewDictionaryItem)
 
-#Sample usage
-# thisaccess_token = "ya29.GltnBpKroMR4lRe9CIqo29GV17ddkXxmwrTwl6YxY" \
-#                    "19nBQO_dMaoCyM_1_xcOjivGodnHppUsRRBlwOguauB4MYeMBehcKDOzUkSKDhOoFUNzj96ZkUPU5xOYgKR"
-# google = Google(thisaccess_token)
-# response = google.ListMessagesMatchingQuery()
-# print(response)
-#
-# for message in response:
-#     print(google.GetMessage(message['id']))
-#
-# Getting titles of calendar events
-# events = google.ListCalendatItems()
-#
-# for item in events['items']:
-#     print(item['summary'])
+    def EventList(self):
+        EventArray =[]
+        events = google.ListCalendatItems()
+
+        for i in range(0,5):
+            item = events['items'][i]
+            NewDictionaryItem = {
+                'summary': item.get('summary', 'No Description'),
+                'location': item.get('location', 'No Location'),
+                'time': item.get('start', 'No Time')
+            }
+            EventArray.append(NewDictionaryItem)
+        return EventArray
+
+# Sample usage
+thisaccess_token = "ya29.GltpBlJwAHXAd6rLFiy7Fdc5-q3FA-JNGUvfw5oSM9BVuouMZWFn" \
+                   "FU7Ul5PaPzH-7BYlDsvmAMKAdeQcCy6s1GGOfb-49x7O58C7cPbLMdxeRGkR879vWKvgalGB"
+google = Google(thisaccess_token)
+
+print(google.MessageList())
+print(google.EventList())
 
 
 

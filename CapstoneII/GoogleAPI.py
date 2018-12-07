@@ -2,22 +2,16 @@
 from googleapiclient.discovery import build
 import google.oauth2.credentials
 
-
 class Google:
-    def __init__(self, access_token):
+    def __init__(self, *access_token):
+        if(access_token is not None):
+            self.configure(access_token)
 
+    def configure(self, access_token):
         self.access_token = access_token
         self.credentials = google.oauth2.credentials.Credentials(access_token)
         self.mail_service = build('gmail', 'v1', credentials=self.credentials)
         self.calendar_service = build('calendar', 'v3', credentials=self.credentials)
-
-        try:
-            response = self.authed_session.get("https://www.googleapis.com/gmail/v1/users/me/profile").json()
-            self.email = response["emailAddress"]
-            print(self.email)
-
-        except:
-            print("Error: Invalid Access Token")
 
     def ListMessagesMatchingQuery(self, query=''):
         """List all Messages of the user's mailbox matching the query.
@@ -87,17 +81,18 @@ class Google:
     def MessageList(self):
         MessageArray = []
         try:
-            response = google.ListMessagesMatchingQuery()
+            response = self.ListMessagesMatchingQuery()
             for message in response:
-                full_message = google.GetMessage(message['id'])
+                full_message = self.GetMessage(message['id'])
                 headers = full_message['payload']['headers']
                 for item in headers:
                     if (item['name'] == "From"):
                         NewDictionaryItem = {
                             'from': item['value'],
-                            'summary' : full_message['snippet'][0:50]
+                            'summary' : full_message['snippet'][0:30]
                         }
                         MessageArray.append(NewDictionaryItem)
+
         except:
             print("Error: MessageList")
 
@@ -106,7 +101,7 @@ class Google:
     def EventList(self):
         EventArray =[]
         try:
-            events = google.ListCalendatItems()
+            events = self.ListCalendatItems()
 
             for i in range(0,5):
                 item = events['items'][i]
@@ -121,12 +116,17 @@ class Google:
         return EventArray
 
 # Sample usage
-thisaccess_token = "ya29.GltpBlJwAHXAd6rLFiy7Fdc5-q3FA-JNGUvfw5oSM9BVuouMZWFn" \
-                   "FU7Ul5PaPzH-7BYlDsvmAMKAdeQcCy6s1GGOfb-49x7O58C7cPbLMdxeRGkR879vWKvgalGB"
-google = Google(thisaccess_token)
+thisaccess_token = "ya29.GltrBtwsO65JZVcA7Y1tA_I-iR0J3LbXHiZgsV3nvIl2huRfxJARPDwdcPExJ0GvZj9bsXiWP3bQ9cuN1" \
+                   "VkRDQjpcUEcA2Z7zwRAuWm4gB8QeFBX6QGngJJ3sGvA"
+goog = Google()
 
-google.MessageList()
-google.EventList()
+print("check")
+
+goog.configure(thisaccess_token)
+
+print(goog.MessageList())
+print(goog.EventList())
+
 
 
 

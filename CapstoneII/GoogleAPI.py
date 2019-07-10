@@ -86,8 +86,7 @@ class Google:
 
 
 #Sample usage
-# thisaccess_token = "ya29.GltnBpKroMR4lRe9CIqo29GV17ddkXxmwrTwl6YxY" \
-#                    "19nBQO_dMaoCyM_1_xcOjivGodnHppUsRRBlwOguauB4MYeMBehcKDOzUkSKDhOoFUNzj96ZkUPU5xOYgKR"
+# thisaccess_token = "access_token_here"
 # google = Google(thisaccess_token)
 # response = google.ListMessagesMatchingQuery()
 # print(response)
